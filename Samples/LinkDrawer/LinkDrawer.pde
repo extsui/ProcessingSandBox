@@ -55,7 +55,8 @@ class Point {
 
   void draw() {
     fill(_color);
-    ellipse(x, y, 20, 20);
+    noStroke();
+    ellipse(x, y, 10, 10);
   }
 }
 
@@ -77,9 +78,8 @@ class Line {
   }
 
   void draw() {
-    line(begin.x, begin.y, end.x, end.y);
-
     // TODO: 要メソッド化
+    
     // 終点に矢印を描画
     double lineRadian = getRadian();
     // 矢印の右端 (+30°)
@@ -87,21 +87,39 @@ class Line {
     // 矢印の左端 (-30°)
     double arrowLeftRadian = lineRadian + ((180 - 30) * Math.PI / 180);
 
-    final int ARROW_SIZE = 30;
+    // 矢印の先端を点にめり込まないようにする
+    double arrowReverseRadian = lineRadian + (180 * Math.PI / 180);
+    Point arrowEdgePoint = new Point(
+      end.x + (int)(Math.cos(arrowReverseRadian) * 10),
+      end.y + (int)(Math.sin(arrowReverseRadian) * 10)
+    );
+
+    // 矢印の先端が太く見えてしまうのを避けるために線分は少し短く描画する
+    {
+      stroke(color(255, 100, 100));
+      strokeWeight(5);
+      Point endForDraw = new Point(
+        end.x + (int)(Math.cos(arrowReverseRadian) * 10),
+        end.y + (int)(Math.sin(arrowReverseRadian) * 10)
+      );
+      line(begin.x, begin.y, endForDraw.x, endForDraw.y);
+    }
+
+    final int ARROW_SIZE = 10;
 
     Point arrowRightPoint = new Point(
-      end.x + (int)(Math.cos(arrowRightRadian) * ARROW_SIZE),
-      end.y + (int)(Math.sin(arrowRightRadian) * ARROW_SIZE)
+      arrowEdgePoint.x + (int)(Math.cos(arrowRightRadian) * ARROW_SIZE),
+      arrowEdgePoint.y + (int)(Math.sin(arrowRightRadian) * ARROW_SIZE)
     );
 
     Point arrowLeftPoint = new Point(
-      end.x + (int)(Math.cos(arrowLeftRadian) * ARROW_SIZE),
-      end.y + (int)(Math.sin(arrowLeftRadian) * ARROW_SIZE)
+      arrowEdgePoint.x + (int)(Math.cos(arrowLeftRadian) * ARROW_SIZE),
+      arrowEdgePoint.y + (int)(Math.sin(arrowLeftRadian) * ARROW_SIZE)
     );
 
     triangle(
-      end.x,
-      end.y,
+      arrowEdgePoint.x,
+      arrowEdgePoint.y,
       arrowRightPoint.x,
       arrowRightPoint.y,
       arrowLeftPoint.x,
