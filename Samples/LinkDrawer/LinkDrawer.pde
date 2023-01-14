@@ -1,7 +1,7 @@
-ArrayList<Point> pointList = new ArrayList<Point>();
-ArrayList<Line> lineList = new ArrayList<Line>();
+import java.util.LinkedList;
 
-Point previousPoint = null;
+LinkedList<Point> pointList = new LinkedList<Point>();
+LinkedList<Line> lineList = new LinkedList<Line>();
 
 void setup() {
   size(640, 480);
@@ -23,12 +23,11 @@ void mouseClicked(MouseEvent e) {
   switch (e.getButton()) {
   case LEFT: // 左クリック
     Point newPoint = new Point(mouseX, mouseY);
-    pointList.add(newPoint);
-    if (previousPoint != null) {
-      Line newLine = new Line(previousPoint, newPoint);
+    if (pointList.size() >= 1) {
+      Line newLine = new Line(pointList.getLast(), newPoint);
       lineList.add(newLine);
     }
-    previousPoint = newPoint;
+    pointList.add(newPoint);
     break;
   case CENTER:  // ホイールクリック
     break;
