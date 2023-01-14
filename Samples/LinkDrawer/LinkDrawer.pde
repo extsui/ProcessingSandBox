@@ -71,8 +71,42 @@ class Line {
     this.end = end;
   }
 
+  // 二点間の角度 (rad)
+  private double getRadian() {
+    double radian = Math.atan2(end.y - begin.y, end.x - begin.x);
+    return radian;
+  }
+
   void draw() {
-    // TODO: 終点に矢印を描く
     line(begin.x, begin.y, end.x, end.y);
+
+    // TODO: 要メソッド化
+    // 終点に矢印を描画
+    double lineRadian = getRadian();
+    // 矢印の右端 (+30°)
+    double arrowRightRadian = lineRadian + ((180 + 30) * Math.PI / 180);
+    // 矢印の左端 (-30°)
+    double arrowLeftRadian = lineRadian + ((180 - 30) * Math.PI / 180);
+
+    final int ARROW_SIZE = 30;
+
+    Point arrowRightPoint = new Point(
+      end.x + (int)(Math.cos(arrowRightRadian) * ARROW_SIZE),
+      end.y + (int)(Math.sin(arrowRightRadian) * ARROW_SIZE)
+    );
+
+    Point arrowLeftPoint = new Point(
+      end.x + (int)(Math.cos(arrowLeftRadian) * ARROW_SIZE),
+      end.y + (int)(Math.sin(arrowLeftRadian) * ARROW_SIZE)
+    );
+
+    triangle(
+      end.x,
+      end.y,
+      arrowRightPoint.x,
+      arrowRightPoint.y,
+      arrowLeftPoint.x,
+      arrowLeftPoint.y
+    );
   }
 }
