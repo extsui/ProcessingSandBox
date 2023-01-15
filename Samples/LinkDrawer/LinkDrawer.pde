@@ -24,11 +24,10 @@ void draw() {
   }
 }
 
-// マウスがクリックされた時に呼び出されるハンドラ
-// TODO: mouseClicked() の反応がかなり悪いので
-//       mousePressed や mouseReleased とかで書き直した方が良いかも
-void mouseClicked(MouseEvent e) {
-  switch (e.getButton()) {
+// マウスが押下された時に呼び出されるハンドラ
+// NOTE: mouseClicked() の反応がかなり悪いので押下判定とした
+void mousePressed(MouseEvent e) {
+  switch (e.getButton()) {  // mouseButton でも思う
   case LEFT: // 左クリック
     Point newPoint = new Point(mouseX, mouseY);
     if (pointList.size() >= 1) {
@@ -54,6 +53,9 @@ void mouseClicked(MouseEvent e) {
   case CENTER:  // ホイールクリック
     break;
   case RIGHT:  // 右クリック
+    pointList.clear();
+    lineList.clear();
+    crossList.clear();
     break;
   default:
     break;
