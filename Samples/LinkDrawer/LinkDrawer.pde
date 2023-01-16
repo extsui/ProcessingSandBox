@@ -13,6 +13,10 @@ void setup() {
 
 void draw() {
   background(255);
+
+  // TODO: おそらく全て共通のインタフェースにできるはず
+
+  // 描画処理
   for (var point : pointList) {
     point.draw();
   }
@@ -21,6 +25,14 @@ void draw() {
   }
   for (var cross : crossList) {
     cross.draw();
+  }
+
+  // マウスとの衝突判定
+  Point mousePoint = new Point(mouseX, mouseY);
+  for (var point : pointList) {
+    if (point.isCollided(mousePoint)) {
+      point.onCollided();
+    }
   }
 }
 
@@ -70,6 +82,8 @@ class Point {
   private int y;
   private color _color;
 
+  final int RADIUS = 10;
+
   int GetX() {
     return x;
   }
@@ -90,6 +104,22 @@ class Point {
 
   void draw() {
     fill(_color);
+    noStroke();
+    ellipse(x, y, 10, 10);
+  }
+
+  // 対象の点と衝突しているか
+  boolean isCollided(final Point point) {
+    // 二点間の距離が r 以下であれば衝突している
+    int diffX = (point.GetX() - this.x);
+    int diffY = (point.GetY() - this.y);
+    double distance = Math.sqrt(diffX * diffX + diffY * diffY);
+    return distance <= RADIUS;
+  }
+
+  // 衝突時の処理
+  void onCollided() {
+    fill(#8080FF);
     noStroke();
     ellipse(x, y, 10, 10);
   }
